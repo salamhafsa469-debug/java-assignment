@@ -1,0 +1,185 @@
+Product wise sum without hashmap
+import java.util.Scanner;
+import java.io.File;
+
+class SalesTotal_ProductWise_NoHM {
+    public static void main(String[] args) throws Exception {
+        File f = new File("c:\\temp\\SalesEVESession.txt");
+        Scanner inp = new Scanner(f);
+        inp.nextLine(); // skip header
+
+        // First pass: collect all unique product names
+        Scanner inp2 = new Scanner(f);
+        inp2.nextLine();
+
+        String[] productNames = new String[100];
+        double[] productTotals = new double[100];
+        int count = 0;
+
+        while (inp2.hasNextLine()) {
+            String line = inp2.nextLine();
+            if (line.trim().isEmpty()) continue;
+
+            String[] parts = line.split("\t");
+            String prodName = parts[1];
+            double qty     = Double.parseDouble(parts[3]);
+            double uPrice  = Double.parseDouble(parts[2]);
+            double amt     = qty * uPrice;
+
+            // Check if product already exists in our array
+            int found = -1;
+            for (int i = 0; i < count; i++) {
+                if (productNames[i].equals(prodName)) {
+                    found = i;
+                    break;
+                }
+            }
+
+            if (found != -1) {
+                productTotals[found] += amt; // add to existing
+            } else {
+                productNames[count] = prodName; // new product
+                productTotals[count] = amt;
+                count++;
+            }
+        }
+
+        System.out.println("Product-wise Sales Total:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(productNames[i] + " --- " + productTotals[i]);
+        }
+    }
+}
+
+
+
+Id-wise sum without hashmap
+ import java.util.Scanner;
+import java.io.File;
+
+class SalesTotal_IDWise_NoHM {
+    public static void main(String[] args) throws Exception {
+        File f = new File("c:\\temp\\SalesEVESession.txt");
+        Scanner inp2 = new Scanner(f);
+        inp2.nextLine(); // skip header
+
+        String[] ids = new String[100];
+        double[] idTotals = new double[100];
+        int count = 0;
+
+        while (inp2.hasNextLine()) {
+            String line = inp2.nextLine();
+            if (line.trim().isEmpty()) continue;
+
+            String[] parts = line.split("\t");
+            String id     = parts[0];           // ID is first column
+            double qty    = Double.parseDouble(parts[3]);
+            double uPrice = Double.parseDouble(parts[2]);
+            double amt    = qty * uPrice;
+
+            int found = -1;
+            for (int i = 0; i < count; i++) {
+                if (ids[i].equals(id)) {
+                    found = i;
+                    break;
+                }
+            }
+
+            if (found != -1) {
+                idTotals[found] += amt;
+            } else {
+                ids[count] = id;
+                idTotals[count] = amt;
+                count++;
+            }
+        }
+
+        System.out.println("ID-wise Sales Total:");
+        for (int i = 0; i < count; i++) {
+            System.out.println("ID: " + ids[i] + " --- " + idTotals[i]);
+        }
+      
+
+
+Product wise sum with hashmap
+ import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+import java.io.File;
+
+class SalesTotal_ProductWise_HM {
+    public static void main(String[] args) {
+        File f = new File("c:\\temp\\SalesEVESession.txt");
+        HashMap<String, Double> hm = new HashMap<>();
+
+        try {
+            Scanner inp = new Scanner(f);
+            inp.nextLine(); // skip header
+
+            while (inp.hasNextLine()) {
+                String line = inp.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] parts = line.split("\t");
+                String prodName = parts[1];
+                double uPrice   = Double.parseDouble(parts[2]);
+                double qty      = Double.parseDouble(parts[3]);
+                double amt      = qty * uPrice;
+
+                // If product exists, add to it. Otherwise, create new entry.
+                hm.put(prodName, hm.getOrDefault(prodName, 0.0) + amt);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("Product-wise Sales Total:");
+        for (Map.Entry<String, Double> me : hm.entrySet()) {
+            System.out.println(me.getKey() + " --- " + me.getValue());
+        }
+    }
+}
+
+
+
+          
+  I'd -wise sum with hashmap
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+import java.io.File;
+
+class SalesTotal_IDWise_HM {
+    public static void main(String[] args) {
+        File f = new File("c:\\temp\\SalesEVESession.txt");
+        HashMap<String, Double> hm = new HashMap<>();
+
+        try {
+            Scanner inp = new Scanner(f);
+            inp.nextLine(); // skip header
+
+            while (inp.hasNextLine()) {
+                String line = inp.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] parts = line.split("\t");
+                String id     = parts[0];           // ID column
+                double uPrice = Double.parseDouble(parts[2]);
+                double qty    = Double.parseDouble(parts[3]);
+                double amt    = qty * uPrice;
+
+                hm.put(id, hm.getOrDefault(id, 0.0) + amt);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("ID-wise Sales Total:");
+        for (Map.Entry<String, Double> me : hm.entrySet()) {
+            System.out.println("ID: " + me.getKey() + " --- " + me.getValue());
+        }
+    }
+}
+    }
